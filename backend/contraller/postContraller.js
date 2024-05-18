@@ -44,6 +44,29 @@ const getPostsForGroup = async(req, res)=> {
     }
 };
 
+const getPostsForUser = async(req, res)=>{
+    try {
+        const { userId } = req.ruery
+        if (!userId) throw new Error('no user entered');
+        const checkUser = await User.findOne({userId});
+        if (!checkUser) throw new Error('user not found');
+
+        const posts = await Post.find({userId})
+        if(!posts) throw new Error(`no posts found for user ${userId}`);
+        res.status(200).json({
+            msg:`posts found for user ${userId}`,
+            data: posts,
+            success:true,
+            error:false
+        })
+    } catch(err) {
+        res.status(400).json({
+            msg:err.message || err,
+            success: false,
+            error: true
+        })
+    }
+}
 
 const getOnePost = async(req, res)=>{
     try{
@@ -154,9 +177,9 @@ const deletePost = async(req, res)=>{
 
 module.exports = {
     getPosts,
-    getOneGroup,
-    getPostsForGroup,
     getOnePost,
+    getPostsForGroup,
+    getPostsForUser,
     createPost,
     updatePost,
     deletePost

@@ -158,6 +158,5 @@ module.exports = {
     getOneComment,
     createcomment,
     updateComment,
-    updatePost,
     deleteComment
 };
